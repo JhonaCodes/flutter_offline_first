@@ -23,20 +23,19 @@ class RustLib {
   }
 
   static DynamicLibrary _loadLibrary() {
-    if (Platform.isAndroid) {
-
-      if(Platform.version.contains('arm64')){
+    try {
+      if (Platform.isAndroid) {
         return DynamicLibrary.open('liboffline_first_core.so');
-      }else{
-        return DynamicLibrary.open('liboffline_first_core.so');
+      } else if (Platform.isIOS) {
+        return DynamicLibrary.open('ios/liboffline_first_core.a');
+      } else if (Platform.isMacOS) {
+        return DynamicLibrary.open('macos/liboffline_first_core.dylib');
+      } else {
+        throw UnsupportedError('Unsupported platform: ${Platform.operatingSystem}');
       }
-
-    } else if (Platform.isIOS) {
-      return DynamicLibrary.open('ios/liboffline_first_core.a');
-    } else if (Platform.isMacOS) {
-      return DynamicLibrary.open('macos/liboffline_first_core.dylib');
-    } else {
-      throw UnsupportedError('Unsupported platform: ${Platform.operatingSystem}');
+    } catch (e) {
+      print('Error loading library: $e');
+      rethrow;
     }
   }
 
