@@ -5,8 +5,8 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:ffi/ffi.dart';
+import 'package:flutter_offline_first/src/ffi_functions.dart';
 
-import 'ffi_functions.dart';
 import 'local_db_model.dart';
 
 
