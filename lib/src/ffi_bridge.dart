@@ -26,15 +26,15 @@ class RustLib {
     if (Platform.isAndroid) {
 
       if(Platform.version.contains('arm64')){
-        return DynamicLibrary.open('binaries/android/arm64-v8a/liboffline_first_core.so');
+        return DynamicLibrary.open('android/arm64-v8a/liboffline_first_core.so');
       }else{
-        return DynamicLibrary.open('binaries/android/armeabi-v7a/liboffline_first_core.so');
+        return DynamicLibrary.open('android/armeabi-v7a/liboffline_first_core.so');
       }
 
     } else if (Platform.isIOS) {
-      return DynamicLibrary.open('binaries/ios/liboffline_first_core.a');
+      return DynamicLibrary.open('ios/liboffline_first_core.a');
     } else if (Platform.isMacOS) {
-      return DynamicLibrary.open('binaries/macos/liboffline_first_core.dylib');
+      return DynamicLibrary.open('macos/liboffline_first_core.dylib');
     } else {
       throw UnsupportedError('Unsupported platform: ${Platform.operatingSystem}');
     }
