@@ -26,9 +26,9 @@ class RustLib {
     if (Platform.isAndroid) {
 
       if(Platform.version.contains('arm64')){
-        return DynamicLibrary.open('android/arm64-v8a/liboffline_first_core.so');
+        return DynamicLibrary.open('android/src/main/jniLibs/arm64-v8a/liboffline_first_core.so');
       }else{
-        return DynamicLibrary.open('android/armeabi-v7a/liboffline_first_core.so');
+        return DynamicLibrary.open('android/src/main/jniLibs/armeabi-v7a/liboffline_first_core.so');
       }
 
     } else if (Platform.isIOS) {
