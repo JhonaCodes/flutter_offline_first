@@ -7,6 +7,7 @@ import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter_offline_first/src/ffi_functions.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'local_db_model.dart';
@@ -72,9 +73,11 @@ class RustLib {
     _delete = _lib.lookupFunction<Pointer<Bool> Function(Pointer<AppDbState>, Pointer<Utf8>), Pointer<Bool> Function(Pointer<AppDbState>, Pointer<Utf8>)>(FFiFunctions.delete.cName);
   }
 
-  static void _init(String databaseName) {
+  static Future<void> _init(String databaseName) async{
     try {
-      final dbNamePtr = databaseName.toNativeUtf8();
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final dbNamePtr = "${appDir.path}/$databaseName".toNativeUtf8();
       _dbInstance = _createDatabase(dbNamePtr);
       calloc.free(dbNamePtr);
     } catch (error, stackTrace) {
