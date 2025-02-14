@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  ffi: ^2.1.3
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +18,5 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
+  assets:
+    - binaries/macos/liboffline_first_core.dylib
