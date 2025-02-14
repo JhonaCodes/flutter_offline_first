@@ -1,4 +1,5 @@
 // lib/src/bridge.dart
+import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:ffi';
@@ -6,26 +7,42 @@ import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 import 'package:flutter_offline_first/src/ffi_functions.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import 'local_db_model.dart';
 
 
 final class AppDbState extends Opaque {}
 
+Future<bool> requestStoragePermission() async {
+  if (await Permission.storage.isGranted) {
+    return true;
+  } else {
+    var status = await Permission.storage.request();
+    return status.isGranted;
+  }
+}
+
 class RustLib {
   static late final DynamicLibrary _lib;
   static late final Pointer<AppDbState> _dbInstance;
 
-  static void initialize(String databaseName) {
-    _lib = _loadLibrary();
+  static Future<void> initialize(String databaseName) async{
+    _lib = await _loadLibrary();
     _bindFunctions();
     _init(databaseName);
   }
 
-  static DynamicLibrary _loadLibrary() {
+  static Future<DynamicLibrary>  _loadLibrary() async{
     try {
       if (Platform.isAndroid) {
+        final hasPermission = await requestStoragePermission();
+
+        if(!hasPermission) {
+          throw Exception("No se pudo obtener el permiso de almacenamiento");
+        }
         return DynamicLibrary.open('liboffline_first_core.so');
+
       } else if (Platform.isIOS) {
         return DynamicLibrary.open('ios/liboffline_first_core.a');
       } else if (Platform.isMacOS) {
